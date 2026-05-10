@@ -1,0 +1,894 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>变形金刚：地球战争 - 合体金刚综合强度榜 | ARMADA ONE</title>
+    <style>
+        :root {
+            --primary-gold: #FF9F00; 
+            --bg-dark: #0a0a0a;      
+            --card-bg: #161616;      
+            --border-color: #2a2a2a; 
+            --text-main: #ffffff;
+            --text-dim: #aaaaaa;
+            --accent-red: #ff4d4d;
+            --accent-orange: #ff944d;
+            --accent-yellow: #ffdb4d;
+            --accent-green: #4dff4d;
+            --accent-blue: #4da6ff;
+            --star-gold: #FFD700;
+            --star-empty: #333333;
+        }
+
+        body {
+            font-family: 'Segoe UI', 'Microsoft YaHei', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            margin: 0;
+            padding: 40px 20px;
+        }
+
+        .container {
+            max-width: 1200px; 
+            margin: 0 auto;
+        }
+
+        /* 主标题放大至 56px */
+        h1 {
+            text-align: center;
+            font-size: 56px; 
+            text-transform: uppercase;
+            letter-spacing: 6px; 
+            margin-bottom: 5px;
+            font-weight: 800;
+            background: linear-gradient(to bottom, #ffffff 20%, #FFD700 50%, var(--primary-gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            filter: drop-shadow(0 4px 4px rgba(0,0,0,0.5));
+        }
+
+        /* 下划线加长以适配大标题 */
+        .header-underline {
+            width: 120px; 
+            height: 4px;
+            background-color: var(--primary-gold);
+            margin: 0 auto 20px;
+            border-radius: 2px;
+            box-shadow: 0 0 10px rgba(255, 159, 0, 0.4);
+        }
+
+        .update-info {
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 13px;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+        }
+
+        .general-desc {
+            text-align: center;
+            color: var(--text-dim);
+            font-size: 14px;
+            line-height: 1.6;
+            margin-bottom: 40px;
+            max-width: 1050px; 
+            margin-left: auto;
+            margin-right: auto;
+            background: rgba(255, 255, 255, 0.03);
+            padding: 15px;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+        }
+
+        .section-divider {
+            margin: 60px 0 30px;
+            padding: 16px 25px;
+            background: linear-gradient(90deg, rgba(255,159,0,0.12) 0%, transparent 100%);
+            border-left: 6px solid var(--primary-gold);
+            border-radius: 0 8px 8px 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .section-title-main {
+            font-size: 26px;
+            font-weight: 800;
+            color: var(--primary-gold);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 8px;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .section-note {
+            font-size: 13px;
+            color: #c0c0c0;
+            font-weight: normal;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-note::before {
+            content: "NOTE";
+            font-size: 10px;
+            background: rgba(255, 159, 0, 0.2);
+            color: var(--primary-gold);
+            padding: 2px 6px;
+            border-radius: 3px;
+            margin-right: 10px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            border: 1px solid rgba(255, 159, 0, 0.3);
+        }
+
+        .sub-section-title {
+            font-size: 20px;
+            color: var(--text-main);
+            margin: 30px 0 15px;
+            padding-left: 10px;
+            border-left: 4px solid var(--accent-blue);
+            font-weight: bold;
+        }
+
+        .tier-row {
+            display: flex;
+            margin-bottom: 25px;
+            background-color: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+
+        .tier-label {
+            width: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--text-main);
+            flex-shrink: 0;
+            border-right: 1px solid var(--border-color);
+        }
+
+        .t1 { border-left: 5px solid var(--accent-red); } 
+        .t2 { border-left: 5px solid var(--accent-orange); }
+        .t3 { border-left: 5px solid var(--accent-yellow); }
+        .t4 { border-left: 5px solid var(--accent-green); }
+
+        .tier-bots {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 20px;
+            gap: 25px;
+            justify-content: flex-start;
+        }
+
+        .bot-card {
+            width: 220px; /* 加宽卡片 */
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            transition: transform 0.2s ease;
+        }
+
+        .bot-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .bot-img-wrapper {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+            border-bottom: 3px solid transparent; 
+            padding-bottom: 5px;
+            width: 100%;
+            justify-content: center;
+        }
+        
+        .autobot { border-bottom-color: #ff3b3b; }    
+        .decepticon { border-bottom-color: #9d4edd; } 
+
+        .bot-avatar {
+            width: 200px;  /* 放大图片宽度 */
+            height: 200px; /* 放大图片高度 */
+            object-fit: contain;
+            filter: drop-shadow(0 5px 10px rgba(0,0,0,0.5));
+            border-radius: 8px;
+        }
+
+        .bot-name {
+            font-size: 15px;
+            font-weight: bold;
+            color: var(--text-main);
+            margin-bottom: 4px;
+            display: flex;
+            flex-direction: column; 
+            align-items: flex-start;
+            line-height: 1.4;
+        }
+
+        .bot-name-en {
+            font-size: 11px;
+            color: var(--text-dim);
+            font-weight: normal;
+            text-transform: uppercase; 
+            letter-spacing: 0.5px;
+            margin-bottom: 2px;
+        }
+
+        .star-rating-container {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            margin-top: 5px;
+            width: 100%;
+        }
+
+        .stat-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 11px;
+            color: var(--text-dim);
+            background: rgba(255,255,255,0.05);
+            padding: 2px 6px;
+            border-radius: 3px;
+            border: 1px solid var(--border-color);
+        }
+
+        .star-group {
+            display: flex;
+            gap: 2px;
+        }
+        .s-full { fill: var(--star-gold); }
+        .s-empty { fill: var(--star-empty); }
+        .s-half { fill: url(#halfGradient); }
+
+        .footer-note {
+            margin-top: 50px;
+            text-align: center;
+            color: #555;
+            font-size: 12px;
+            letter-spacing: 1px;
+            padding-bottom: 40px;
+        }
+
+        /* 手机端适配：屏幕小于768px时，自动缩小字体防错位 */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 32px;
+                letter-spacing: 3px;
+            }
+            .section-title-main {
+                font-size: 20px;
+            }
+            .section-note {
+                font-size: 11px;
+            }
+            .tier-label {
+                width: 80px;
+                font-size: 16px;
+            }
+            .bot-card {
+                width: 160px; /* 手机端卡片同步适度加大 */
+            }
+            .bot-avatar {
+                width: 140px; /* 手机端图片同步适度加大 */
+                height: 140px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position: absolute;">
+    <defs>
+        <linearGradient id="halfGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="50%" stop-color="var(--star-gold)" />
+            <stop offset="50%" stop-color="var(--star-empty)" />
+        </linearGradient>
+        
+        <symbol id="star-icon" viewBox="0 0 24 24">
+            <path d="M12 .587l3.668 7.568 8.332 1.151-6.064 5.828 1.48 8.279-7.416-3.967-7.417 3.967 1.481-8.279-6.064-5.828 8.332-1.151z"/>
+        </symbol>
+    </defs>
+</svg>
+
+<div class="container">
+    <h1>合体金刚综合强度排行榜</h1>
+    <div class="header-underline"></div>
+    <div class="update-info">更新日期: 2026-05-05 | 榜单作者: Val</div>
+
+    <div class="general-desc">
+        <b>说明：</b>“离场效果”是指合体金刚解体后为队伍施加的 Buff 加成，在盟战中至关重要。
+    </div>
+
+    <!-- BLOCK 1: PRIME LEAGUE -->
+    <div class="section-divider">
+        <div class="section-title-main">至尊盟战进攻榜</div>
+        <div class="section-note">所有合体金刚均处于满星满级状态下</div>
+    </div>
+    
+    <div class="tier-row">
+        <div class="tier-label t1">TOP 1-3</div>
+        <div class="tier-bots">
+            <div class="bot-card">
+                <div class="bot-img-wrapper autobot"><img src="images/OmegaSupreme.png" class="bot-avatar"></div>
+                <div class="bot-name">奥米加<span class="bot-name-en">Omega Supreme</span></div>
+                <div class="star-rating-container">
+                    <div class="stat-row"><span>离场效果</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg>
+                    </div></div>
+                    <div class="stat-row"><span>伤害输出</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg>
+                    </div></div>
+                    <div class="stat-row"><span>生存能力</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-half"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg>
+                    </div></div>
+                </div>
+            </div>
+            <div class="bot-card">
+                <div class="bot-img-wrapper decepticon"><img src="images/Overlord.png" class="bot-avatar"></div>
+                <div class="bot-name">霸王<span class="bot-name-en">Overlord</span></div>
+                <div class="star-rating-container">
+                    <div class="stat-row"><span>离场效果</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg>
+                    </div></div>
+                    <div class="stat-row"><span>伤害输出</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg>
+                    </div></div>
+                    <div class="stat-row"><span>生存能力</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-half"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg>
+                    </div></div>
+                </div>
+            </div>
+            <div class="bot-card">
+                <div class="bot-img-wrapper autobot"><img src="images/Raiden.png" class="bot-avatar"></div>
+                <div class="bot-name">雷电<span class="bot-name-en">Raiden</span></div>
+                <div class="star-rating-container">
+                    <div class="stat-row"><span>离场效果</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg>
+                    </div></div>
+                    <div class="stat-row"><span>建筑伤害</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg>
+                    </div></div>
+                    <div class="stat-row"><span>哨兵伤害</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg>
+                    </div></div>
+                    <div class="stat-row"><span>生存能力</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-half"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg>
+                    </div></div>
+                </div>
+            </div>
+            <div class="bot-card">
+                <div class="bot-img-wrapper decepticon"><img src="images/Dinoking.png" class="bot-avatar"></div>
+                <div class="bot-name">怪魔<span class="bot-name-en">Dinoking</span></div>
+                <div class="star-rating-container">
+                    <div class="stat-row"><span>离场效果</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg>
+                    </div></div>
+                    <div class="stat-row"><span>建筑伤害</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg>
+                    </div></div>
+                    <div class="stat-row"><span>哨兵伤害</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg>
+                    </div></div>
+                    <div class="stat-row"><span>生存能力</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-half"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg>
+                    </div></div>
+                </div>
+            </div>
+            <div class="bot-card">
+                <div class="bot-img-wrapper autobot"><img src="images/Ruination.png" class="bot-avatar"></div>
+                <div class="bot-name">祸灭<span class="bot-name-en">Ruination</span></div>
+                <div class="star-rating-container">
+                    <div class="stat-row"><span>离场效果</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg>
+                    </div></div>
+                    <div class="stat-row"><span>伤害输出</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg>
+                    </div></div>
+                    <div class="stat-row"><span>生存能力</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-half"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg>
+                    </div></div>
+                </div>
+            </div>
+            <div class="bot-card">
+                <div class="bot-img-wrapper decepticon"><img src="images/God Neptune.png" class="bot-avatar"></div>
+                <div class="bot-name">海神尼普顿<span class="bot-name-en">God Neptune</span></div>
+                <div class="star-rating-container">
+                    <div class="stat-row"><span>离场效果</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg>
+                    </div></div>
+                    <div class="stat-row"><span>伤害输出</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg>
+                    </div></div>
+                    <div class="stat-row"><span>生存能力</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-half"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg>
+                    </div></div>
+                </div>
+            </div>
+ 
+        </div>
+    </div>
+
+    <div class="tier-row">
+        <div class="tier-label t2">TOP 4-6</div>
+        <div class="tier-bots">
+            <div class="bot-card">
+                <div class="bot-img-wrapper autobot"><img src="images/Volcanicus.png" class="bot-avatar"></div>
+                <div class="bot-name">龙焱王<span class="bot-name-en">Volcanicus</span></div>
+                <div class="star-rating-container">
+                    <div class="stat-row"><span>离场效果</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg>
+                    </div></div>
+                    <div class="stat-row"><span>伤害输出</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg>
+                    </div></div>
+                    <div class="stat-row"><span>生存能力</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg>
+                    </div></div>
+                </div>
+            </div>
+            
+            <div class="bot-card">
+                <div class="bot-img-wrapper decepticon"><img src="images/Predaking.png" class="bot-avatar"></div>
+                <div class="bot-name">霹雳星<span class="bot-name-en">Predaking</span></div>
+                <div class="star-rating-container">
+                    <div class="stat-row"><span>离场效果</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg>
+                    </div></div>
+                    <div class="stat-row"><span>伤害输出</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg>
+                    </div></div>
+                    <div class="stat-row"><span>生存能力</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg>
+                    </div></div>
+                </div>
+            </div>
+            
+            <div class="bot-card">
+                <div class="bot-img-wrapper autobot"><img src="images/Computron.png" class="bot-avatar"></div>
+                <div class="bot-name">电脑金刚<span class="bot-name-en">Computron</span></div>
+                <div class="star-rating-container">
+                    <div class="stat-row"><span>离场效果</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg>
+                    </div></div>
+                    <div class="stat-row"><span>建筑伤害</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg>
+                    </div></div>
+                    <div class="stat-row"><span>哨兵伤害</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg>
+                    </div></div>
+                    <div class="stat-row"><span>生存能力</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg>
+                    </div></div>
+                </div>
+            </div>
+            
+            <div class="bot-card">
+                <div class="bot-img-wrapper decepticon"><img src="images/Liokaiser.png" class="bot-avatar"></div>
+                <div class="bot-name">盖世群魔<span class="bot-name-en">Liokaiser</span></div>
+                <div class="star-rating-container">
+                    <div class="stat-row"><span>离场效果</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg>
+                    </div></div>
+                    <div class="stat-row"><span>建筑伤害</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg>
+                    </div></div>
+                    <div class="stat-row"><span>哨兵伤害</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg>
+                    </div></div>
+                    <div class="stat-row"><span>生存能力</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg>
+                    </div></div>
+                </div>
+            </div>
+            
+            <div class="bot-card">
+                <div class="bot-img-wrapper autobot"><img src="images/Sky Reign.png" class="bot-avatar"></div>
+                <div class="bot-name">天空霸主<span class="bot-name-en">Sky Reign</span></div>
+                <div class="star-rating-container">
+                    <div class="stat-row"><span>离场效果</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-half"/></svg>
+                    </div></div>
+                    <div class="stat-row"><span>伤害输出</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg>
+                    </div></div>
+                    <div class="stat-row"><span>生存能力</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-half"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg>
+                    </div></div>
+                </div>
+            </div>
+            
+            <div class="bot-card">
+                <div class="bot-img-wrapper decepticon"><img src="images/Galvatronus.png" class="bot-avatar"></div>
+                <div class="bot-name">破天尊<span class="bot-name-en">Galvatronus</span></div>
+                <div class="star-rating-container">
+                    <div class="stat-row"><span>离场效果</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-half"/></svg>
+                    </div></div>
+                    <div class="stat-row"><span>伤害输出</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg>
+                    </div></div>
+                    <div class="stat-row"><span>生存能力</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-half"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg>
+                    </div></div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <div class="tier-row">
+        <div class="tier-label t3">TOP 7-9</div>
+        <div class="tier-bots">
+            <div class="bot-card">
+                <div class="bot-img-wrapper autobot"><img src="images/Defensor.png" class="bot-avatar"></div>
+                <div class="bot-name">保卫战士<span class="bot-name-en">Defensor</span></div>
+                <div class="star-rating-container">
+                    <div class="stat-row"><span>离场效果</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg>
+                    </div></div>
+                    <div class="stat-row"><span>伤害输出</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg>
+                    </div></div>
+                    <div class="stat-row"><span>生存能力</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg>
+                    </div></div>
+                </div>
+            </div>
+            
+            <div class="bot-card">
+                <div class="bot-img-wrapper decepticon"><img src="images/Abominus.png" class="bot-avatar"></div>
+                <div class="bot-name">憎恨狂魔<span class="bot-name-en">Abominus</span></div>
+                <div class="star-rating-container">
+                    <div class="stat-row"><span>离场效果</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg>
+                    </div></div>
+                    <div class="stat-row"><span>伤害输出</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg>
+                    </div></div>
+                    <div class="stat-row"><span>生存能力</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg>
+                    </div></div>
+                </div>
+            </div>
+            
+            <div class="bot-card">
+                <div class="bot-img-wrapper autobot"><img src="images/Optimus Maximus.png" class="bot-avatar"></div>
+                <div class="bot-name">至尊战士<span class="bot-name-en">Optimus Maximus</span></div>
+                <div class="star-rating-container">
+                    <div class="stat-row"><span>离场效果</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg>
+                    </div></div>
+                    <div class="stat-row"><span>伤害输出</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg>
+                    </div></div>
+                    <div class="stat-row"><span>生存能力</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg>
+                    </div></div>
+                </div>
+            </div>
+            
+            <div class="bot-card">
+                <div class="bot-img-wrapper decepticon"><img src="images/Bruticus.png" class="bot-avatar"></div>
+                <div class="bot-name">布斯达<span class="bot-name-en">Bruticus</span></div>
+                <div class="star-rating-container">
+                    <div class="stat-row"><span>离场效果</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg>
+                    </div></div>
+                    <div class="stat-row"><span>伤害输出</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg>
+                    </div></div>
+                    <div class="stat-row"><span>生存能力</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg>
+                    </div></div>
+                </div>
+            </div>
+            
+            <div class="bot-card">
+                <div class="bot-img-wrapper autobot"><img src="images/Magnaboss.png" class="bot-avatar"></div>
+                <div class="bot-name">万兽王<span class="bot-name-en">Magnaboss</span></div>
+                <div class="star-rating-container">
+                    <div class="stat-row"><span>离场效果</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg>
+                    </div></div>
+                    <div class="stat-row"><span>伤害输出</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg>
+                    </div></div>
+                    <div class="stat-row"><span>生存能力</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg>
+                    </div></div>
+                </div>
+            </div>
+            
+            <div class="bot-card">
+                <div class="bot-img-wrapper decepticon"><img src="images/Tripredacus.png" class="bot-avatar"></div>
+                <div class="bot-name">三虫仙<span class="bot-name-en">Tripredacus</span></div>
+                <div class="star-rating-container">
+                    <div class="stat-row"><span>离场效果</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg>
+                    </div></div>
+                    <div class="stat-row"><span>伤害输出</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg>
+                    </div></div>
+                    <div class="stat-row"><span>生存能力</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg>
+                    </div></div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <div class="tier-row">
+        <div class="tier-label t4">TOP 10-11</div>
+        <div class="tier-bots">
+            <div class="bot-card">
+                <div class="bot-img-wrapper autobot"><img src="images/Superion.png" class="bot-avatar"></div>
+                <div class="bot-name">大无畏<span class="bot-name-en">Superion</span></div>
+                <div class="star-rating-container">
+                    <div class="stat-row"><span>离场效果</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg>
+                    </div></div>
+                    <div class="stat-row"><span>伤害输出</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg>
+                    </div></div>
+                    <div class="stat-row"><span>生存能力</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg>
+                    </div></div>
+                </div>
+            </div>
+            
+            <div class="bot-card">
+                <div class="bot-img-wrapper decepticon"><img src="images/Devastator.png" class="bot-avatar"></div>
+                <div class="bot-name">毁灭者<span class="bot-name-en">Devastator</span></div>
+                <div class="star-rating-container">
+                    <div class="stat-row"><span>离场效果</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg>
+                    </div></div>
+                    <div class="stat-row"><span>伤害输出</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg>
+                    </div></div>
+                    <div class="stat-row"><span>生存能力</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg>
+                    </div></div>
+                </div>
+            </div>
+            
+            <div class="bot-card">
+                <div class="bot-img-wrapper autobot"><img src="images/Victorion.png" class="bot-avatar"></div>
+                <div class="bot-name">胜利女神<span class="bot-name-en">Victorion</span></div>
+                <div class="star-rating-container">
+                    <div class="stat-row"><span>离场效果</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg>
+                    </div></div>
+                    <div class="stat-row"><span>伤害输出</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg>
+                    </div></div>
+                    <div class="stat-row"><span>生存能力</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-half"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg>
+                    </div></div>
+                </div>
+            </div>
+            
+            <div class="bot-card">
+                <div class="bot-img-wrapper decepticon"><img src="images/Menasor.png" class="bot-avatar"></div>
+                <div class="bot-name">万能丧士<span class="bot-name-en">Menasor</span></div>
+                <div class="star-rating-container">
+                    <div class="stat-row"><span>离场效果</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg>
+                    </div></div>
+                    <div class="stat-row"><span>伤害输出</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg>
+                    </div></div>
+                    <div class="stat-row"><span>生存能力</span><div class="star-group">
+                        <svg width="12" height="12"><use href="#star-icon" class="s-full"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-half"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg><svg width="12" height="12"><use href="#star-icon" class="s-empty"/></svg>
+                    </div></div>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- BLOCK 2: EVENTS & DAILY -->
+    <div class="section-divider">
+        <div class="section-title-main">活动与日常使用</div>
+        <div class="section-note">所有合体金刚均处于满星满级状态下</div>
+    </div>
+    
+    <div class="sub-section-title">进攻榜</div>
+    <div class="tier-row">
+        <div class="tier-label t1">TOP 1-3</div>
+        <div class="tier-bots">
+            <div class="bot-card"><div class="bot-img-wrapper autobot"><img src="images/Raiden.png" class="bot-avatar"></div><div class="bot-name">雷电<span class="bot-name-en">Raiden</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper decepticon"><img src="images/Dinoking.png" class="bot-avatar"></div><div class="bot-name">怪魔<span class="bot-name-en">Dinoking</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper autobot"><img src="images/Volcanicus.png" class="bot-avatar"></div><div class="bot-name">龙焱王<span class="bot-name-en">Volcanicus</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper decepticon"><img src="images/Predaking.png" class="bot-avatar"></div><div class="bot-name">霹雳星<span class="bot-name-en">Predaking</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper autobot"><img src="images/Ruination.png" class="bot-avatar"></div><div class="bot-name">祸灭<span class="bot-name-en">Ruination</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper decepticon"><img src="images/God Neptune.png" class="bot-avatar"></div><div class="bot-name">海神尼普顿<span class="bot-name-en">God Neptune</span></div></div>
+        </div>
+    </div>
+    <div class="tier-row">
+        <div class="tier-label t2">TOP 4-6</div>
+        <div class="tier-bots">
+            <div class="bot-card"><div class="bot-img-wrapper autobot"><img src="images/Computron.png" class="bot-avatar"></div><div class="bot-name">电脑金刚<span class="bot-name-en">Computron</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper decepticon"><img src="images/Liokaiser.png" class="bot-avatar"></div><div class="bot-name">盖世群魔<span class="bot-name-en">Liokaiser</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper autobot"><img src="images/Magnaboss.png" class="bot-avatar"></div><div class="bot-name">万兽王<span class="bot-name-en">Magnaboss</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper decepticon"><img src="images/Tripredacus.png" class="bot-avatar"></div><div class="bot-name">三虫仙<span class="bot-name-en">Tripredacus</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper autobot"><img src="images/OmegaSupreme.png" class="bot-avatar"></div><div class="bot-name">奥米加<span class="bot-name-en">Omega Supreme</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper decepticon"><img src="images/Overlord.png" class="bot-avatar"></div><div class="bot-name">霸王<span class="bot-name-en">Overlord</span></div></div>
+        </div>
+    </div>
+    <div class="tier-row">
+        <div class="tier-label t3">TOP 7-9</div>
+        <div class="tier-bots">
+            <div class="bot-card"><div class="bot-img-wrapper autobot"><img src="images/Sky Reign.png" class="bot-avatar"></div><div class="bot-name">天空霸主<span class="bot-name-en">Sky Reign</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper decepticon"><img src="images/Galvatronus.png" class="bot-avatar"></div><div class="bot-name">破天尊<span class="bot-name-en">Galvatronus</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper autobot"><img src="images/Optimus Maximus.png" class="bot-avatar"></div><div class="bot-name">至尊战士<span class="bot-name-en">Optimus Maximus</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper decepticon"><img src="images/Bruticus.png" class="bot-avatar"></div><div class="bot-name">布斯达<span class="bot-name-en">Bruticus</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper autobot"><img src="images/Defensor.png" class="bot-avatar"></div><div class="bot-name">保卫战士<span class="bot-name-en">Defensor</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper decepticon"><img src="images/Abominus.png" class="bot-avatar"></div><div class="bot-name">憎恨狂魔<span class="bot-name-en">Abominus</span></div></div>
+        </div>
+    </div>
+    <div class="tier-row">
+        <div class="tier-label t4">TOP 10-11</div>
+        <div class="tier-bots">
+            <div class="bot-card"><div class="bot-img-wrapper autobot"><img src="images/Superion.png" class="bot-avatar"></div><div class="bot-name">大无畏<span class="bot-name-en">Superion</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper decepticon"><img src="images/Devastator.png" class="bot-avatar"></div><div class="bot-name">毁灭者<span class="bot-name-en">Devastator</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper autobot"><img src="images/Victorion.png" class="bot-avatar"></div><div class="bot-name">胜利女神<span class="bot-name-en">Victorion</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper decepticon"><img src="images/Menasor.png" class="bot-avatar"></div><div class="bot-name">万能丧士<span class="bot-name-en">Menasor</span></div></div>
+        </div>
+    </div>
+
+    <div class="sub-section-title">防守榜</div>
+    <div class="tier-row">
+        <div class="tier-label t1">TOP 1-3</div>
+        <div class="tier-bots">
+            <div class="bot-card"><div class="bot-img-wrapper autobot"><img src="images/Sky Reign.png" class="bot-avatar"></div><div class="bot-name">天空霸主<span class="bot-name-en">Sky Reign</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper decepticon"><img src="images/Galvatronus.png" class="bot-avatar"></div><div class="bot-name">破天尊<span class="bot-name-en">Galvatronus</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper autobot"><img src="images/Computron.png" class="bot-avatar"></div><div class="bot-name">电脑金刚<span class="bot-name-en">Computron</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper decepticon"><img src="images/Liokaiser.png" class="bot-avatar"></div><div class="bot-name">盖世群魔<span class="bot-name-en">Liokaiser</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper autobot"><img src="images/OmegaSupreme.png" class="bot-avatar"></div><div class="bot-name">奥米加<span class="bot-name-en">Omega Supreme</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper decepticon"><img src="images/Overlord.png" class="bot-avatar"></div><div class="bot-name">霸王<span class="bot-name-en">Overlord</span></div></div>
+        </div>
+    </div>
+    <div class="tier-row">
+        <div class="tier-label t2">TOP 4-6</div>
+        <div class="tier-bots">
+            <div class="bot-card"><div class="bot-img-wrapper autobot"><img src="images/Raiden.png" class="bot-avatar"></div><div class="bot-name">雷电<span class="bot-name-en">Raiden</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper decepticon"><img src="images/Dinoking.png" class="bot-avatar"></div><div class="bot-name">怪魔<span class="bot-name-en">Dinoking</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper autobot"><img src="images/Defensor.png" class="bot-avatar"></div><div class="bot-name">保卫战士<span class="bot-name-en">Defensor</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper decepticon"><img src="images/Abominus.png" class="bot-avatar"></div><div class="bot-name">憎恨狂魔<span class="bot-name-en">Abominus</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper autobot"><img src="images/Ruination.png" class="bot-avatar"></div><div class="bot-name">祸灭<span class="bot-name-en">Ruination</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper decepticon"><img src="images/God Neptune.png" class="bot-avatar"></div><div class="bot-name">海神尼普顿<span class="bot-name-en">God Neptune</span></div></div>
+        </div>
+    </div>
+    <div class="tier-row">
+        <div class="tier-label t3">TOP 7-9</div>
+        <div class="tier-bots">
+            <div class="bot-card"><div class="bot-img-wrapper autobot"><img src="images/Volcanicus.png" class="bot-avatar"></div><div class="bot-name">龙焱王<span class="bot-name-en">Volcanicus</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper decepticon"><img src="images/Predaking.png" class="bot-avatar"></div><div class="bot-name">霹雳星<span class="bot-name-en">Predaking</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper autobot"><img src="images/Optimus Maximus.png" class="bot-avatar"></div><div class="bot-name">至尊战士<span class="bot-name-en">Optimus Maximus</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper decepticon"><img src="images/Bruticus.png" class="bot-avatar"></div><div class="bot-name">布斯达<span class="bot-name-en">Bruticus</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper autobot"><img src="images/Magnaboss.png" class="bot-avatar"></div><div class="bot-name">万兽王<span class="bot-name-en">Magnaboss</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper decepticon"><img src="images/Tripredacus.png" class="bot-avatar"></div><div class="bot-name">三虫仙<span class="bot-name-en">Tripredacus</span></div></div>
+        </div>
+    </div>
+    <div class="tier-row">
+        <div class="tier-label t4">TOP 10-11</div>
+        <div class="tier-bots">
+            <div class="bot-card"><div class="bot-img-wrapper autobot"><img src="images/Victorion.png" class="bot-avatar"></div><div class="bot-name">胜利女神<span class="bot-name-en">Victorion</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper decepticon"><img src="images/Menasor.png" class="bot-avatar"></div><div class="bot-name">万能丧士<span class="bot-name-en">Menasor</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper autobot"><img src="images/Superion.png" class="bot-avatar"></div><div class="bot-name">大无畏<span class="bot-name-en">Superion</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper decepticon"><img src="images/Devastator.png" class="bot-avatar"></div><div class="bot-name">毁灭者<span class="bot-name-en">Devastator</span></div></div>
+        </div>
+    </div>
+
+    <!-- BLOCK 3: 3* RARITY -->
+    <div class="section-divider">
+        <div class="section-title-main">3星合体金刚排行榜</div>
+        <div class="section-note">合体金刚升星后会改变其排名</div>
+    </div>
+    
+    <div class="sub-section-title">进攻榜</div>
+    <div class="tier-row">
+        <div class="tier-label t1">TOP 1-3</div>
+        <div class="tier-bots">
+            <div class="bot-card"><div class="bot-img-wrapper autobot"><img src="images/Ruination.png" class="bot-avatar"></div><div class="bot-name">祸灭<span class="bot-name-en">Ruination</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper decepticon"><img src="images/God Neptune.png" class="bot-avatar"></div><div class="bot-name">海神尼普顿<span class="bot-name-en">God Neptune</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper autobot"><img src="images/Raiden.png" class="bot-avatar"></div><div class="bot-name">雷电<span class="bot-name-en">Raiden</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper decepticon"><img src="images/Dinoking.png" class="bot-avatar"></div><div class="bot-name">怪魔<span class="bot-name-en">Dinoking</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper autobot"><img src="images/Computron.png" class="bot-avatar"></div><div class="bot-name">电脑金刚<span class="bot-name-en">Computron</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper decepticon"><img src="images/Liokaiser.png" class="bot-avatar"></div><div class="bot-name">盖世群魔<span class="bot-name-en">Liokaiser</span></div></div>
+        </div>
+    </div>
+    <div class="tier-row">
+        <div class="tier-label t2">TOP 4-6</div>
+        <div class="tier-bots">
+            <div class="bot-card"><div class="bot-img-wrapper autobot"><img src="images/Volcanicus.png" class="bot-avatar"></div><div class="bot-name">龙焱王<span class="bot-name-en">Volcanicus</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper decepticon"><img src="images/Predaking.png" class="bot-avatar"></div><div class="bot-name">霹雳星<span class="bot-name-en">Predaking</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper autobot"><img src="images/Magnaboss.png" class="bot-avatar"></div><div class="bot-name">万兽王<span class="bot-name-en">Magnaboss</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper decepticon"><img src="images/Tripredacus.png" class="bot-avatar"></div><div class="bot-name">三虫仙<span class="bot-name-en">Tripredacus</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper autobot"><img src="images/Optimus Maximus.png" class="bot-avatar"></div><div class="bot-name">至尊战士<span class="bot-name-en">Optimus Maximus</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper decepticon"><img src="images/Bruticus.png" class="bot-avatar"></div><div class="bot-name">布斯达<span class="bot-name-en">Bruticus</span></div></div>
+        </div>
+    </div>
+    <div class="tier-row">
+        <div class="tier-label t3">TOP 7-9</div>
+        <div class="tier-bots">
+            <div class="bot-card"><div class="bot-img-wrapper autobot"><img src="images/Sky Reign.png" class="bot-avatar"></div><div class="bot-name">天空霸主<span class="bot-name-en">Sky Reign</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper decepticon"><img src="images/Galvatronus.png" class="bot-avatar"></div><div class="bot-name">破天尊<span class="bot-name-en">Galvatronus</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper autobot"><img src="images/Superion.png" class="bot-avatar"></div><div class="bot-name">大无畏<span class="bot-name-en">Superion</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper decepticon"><img src="images/Devastator.png" class="bot-avatar"></div><div class="bot-name">毁灭者<span class="bot-name-en">Devastator</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper autobot"><img src="images/Victorion.png" class="bot-avatar"></div><div class="bot-name">胜利女神<span class="bot-name-en">Victorion</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper decepticon"><img src="images/Menasor.png" class="bot-avatar"></div><div class="bot-name">万能丧士<span class="bot-name-en">Menasor</span></div></div>
+        </div>
+    </div>
+    <div class="tier-row">
+        <div class="tier-label t4">TOP 10-11</div>
+        <div class="tier-bots">
+            <div class="bot-card"><div class="bot-img-wrapper autobot"><img src="images/Defensor.png" class="bot-avatar"></div><div class="bot-name">保卫战士<span class="bot-name-en">Defensor</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper decepticon"><img src="images/Abominus.png" class="bot-avatar"></div><div class="bot-name">憎恨狂魔<span class="bot-name-en">Abominus</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper autobot"><img src="images/OmegaSupreme.png" class="bot-avatar"></div><div class="bot-name">奥米加<span class="bot-name-en">Omega Supreme</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper decepticon"><img src="images/Overlord.png" class="bot-avatar"></div><div class="bot-name">霸王<span class="bot-name-en">Overlord</span></div></div>
+        </div>
+    </div>
+
+    <div class="sub-section-title">防守榜</div>
+    <div class="tier-row">
+        <div class="tier-label t1">TOP 1-3</div>
+        <div class="tier-bots">
+            <div class="bot-card"><div class="bot-img-wrapper autobot"><img src="images/Raiden.png" class="bot-avatar"></div><div class="bot-name">雷电<span class="bot-name-en">Raiden</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper decepticon"><img src="images/Dinoking.png" class="bot-avatar"></div><div class="bot-name">怪魔<span class="bot-name-en">Dinoking</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper autobot"><img src="images/Optimus Maximus.png" class="bot-avatar"></div><div class="bot-name">至尊战士<span class="bot-name-en">Optimus Maximus</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper decepticon"><img src="images/Bruticus.png" class="bot-avatar"></div><div class="bot-name">布斯达<span class="bot-name-en">Bruticus</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper autobot"><img src="images/Ruination.png" class="bot-avatar"></div><div class="bot-name">祸灭<span class="bot-name-en">Ruination</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper decepticon"><img src="images/God Neptune.png" class="bot-avatar"></div><div class="bot-name">海神尼普顿<span class="bot-name-en">God Neptune</span></div></div>
+        </div>
+    </div>
+    <div class="tier-row">
+        <div class="tier-label t2">TOP 4-6</div>
+        <div class="tier-bots">
+            <div class="bot-card"><div class="bot-img-wrapper autobot"><img src="images/Computron.png" class="bot-avatar"></div><div class="bot-name">电脑金刚<span class="bot-name-en">Computron</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper decepticon"><img src="images/Liokaiser.png" class="bot-avatar"></div><div class="bot-name">盖世群魔<span class="bot-name-en">Liokaiser</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper autobot"><img src="images/Volcanicus.png" class="bot-avatar"></div><div class="bot-name">龙焱王<span class="bot-name-en">Volcanicus</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper decepticon"><img src="images/Predaking.png" class="bot-avatar"></div><div class="bot-name">霹雳星<span class="bot-name-en">Predaking</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper autobot"><img src="images/Magnaboss.png" class="bot-avatar"></div><div class="bot-name">万兽王<span class="bot-name-en">Magnaboss</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper decepticon"><img src="images/Tripredacus.png" class="bot-avatar"></div><div class="bot-name">三虫仙<span class="bot-name-en">Tripredacus</span></div></div>
+        </div>
+    </div>
+    <div class="tier-row">
+        <div class="tier-label t3">TOP 7-9</div>
+        <div class="tier-bots">
+            <div class="bot-card"><div class="bot-img-wrapper autobot"><img src="images/Victorion.png" class="bot-avatar"></div><div class="bot-name">胜利女神<span class="bot-name-en">Victorion</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper decepticon"><img src="images/Menasor.png" class="bot-avatar"></div><div class="bot-name">万能丧士<span class="bot-name-en">Menasor</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper autobot"><img src="images/Sky Reign.png" class="bot-avatar"></div><div class="bot-name">天空霸主<span class="bot-name-en">Sky Reign</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper decepticon"><img src="images/Galvatronus.png" class="bot-avatar"></div><div class="bot-name">破天尊<span class="bot-name-en">Galvatronus</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper autobot"><img src="images/Defensor.png" class="bot-avatar"></div><div class="bot-name">保卫战士<span class="bot-name-en">Defensor</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper decepticon"><img src="images/Abominus.png" class="bot-avatar"></div><div class="bot-name">憎恨狂魔<span class="bot-name-en">Abominus</span></div></div>
+        </div>
+    </div>
+    <div class="tier-row">
+        <div class="tier-label t4">TOP 10-11</div>
+        <div class="tier-bots">
+            <div class="bot-card"><div class="bot-img-wrapper autobot"><img src="images/Superion.png" class="bot-avatar"></div><div class="bot-name">大无畏<span class="bot-name-en">Superion</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper decepticon"><img src="images/Devastator.png" class="bot-avatar"></div><div class="bot-name">毁灭者<span class="bot-name-en">Devastator</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper autobot"><img src="images/OmegaSupreme.png" class="bot-avatar"></div><div class="bot-name">奥米加<span class="bot-name-en">Omega Supreme</span></div></div>
+            <div class="bot-card"><div class="bot-img-wrapper decepticon"><img src="images/Overlord.png" class="bot-avatar"></div><div class="bot-name">霸王<span class="bot-name-en">Overlord</span></div></div>
+        </div>
+    </div>
+
+    <div class="footer-note">
+        © ARMADA ONE FAMILY | 本榜单基于 Val's Combiner Tier List | 数据仅供参考
+    </div>
+</div>
+
+</body>
+</html>
